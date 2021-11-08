@@ -1,0 +1,81 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="CSS/style.css" rel="stylesheet">
+</head>
+<body>
+
+<section class="navbar">
+	<div class="navbar-option">
+	<div><a href="menu.html">Menu</a></div>
+	<div><a href="signup.html">SignUp</a></div>
+	<div><a href="login.html">Login</a></div>
+	</div>
+</section>
+
+<section>
+	<form id="login-form" onsubmit="Login(event)">
+		<table>
+			<tr>
+				<td><label>UserName:</label></td>
+				<td><input type="text" id="username"></td>
+			</tr>
+
+			<tr>
+				<td><label>Password:</label></td>
+				<td><input type="password" id="password"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit"></td>
+			</tr>
+		</table>
+	</form>	
+</section>	
+</body>
+</html>
+
+<script>	
+
+function Login(e){
+		e.preventDefault();
+		let myForm = document.getElementById('login-form');
+		let user_data = {
+			username : myForm.username.value,
+			password : myForm.password.value,	
+		};
+		let data_to_send = JSON.stringify(user_data);
+		console.log("data_data" , user_data);
+		fetch("https://masai-api-mocker.herokuapp.com/auth/login" ,{			
+			method:"POST",
+			body:data_to_send,
+			headers:{
+				'Content-Type' : 'application/json',
+			},
+		})
+		.then((res) =>{return res.json() })
+		.then((res) =>{
+			console.log("res" , res);
+			// document.getElementById("printName").innerHTML = user_data.username;
+
+		   fetchmyData(user_data.username, res.token);
+		})
+		.catch((err) =>{ console.log("err" , err); });	
+	}
+	function fetchmyData(username,token){	  
+		fetch(`https://masai-api-mocker.herokuapp.com/user/${username}` ,{		
+			headers:{
+				'Content-Type' : 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+		})
+		.then((res) =>{ return res.json()
+		})
+		.then((res) =>{ 
+			console.log("Fetch" , res);
+			window.location.href = "menu.html";
+		})
+		.catch((err) =>{console.log("err" , err); });
+	}
+</script>

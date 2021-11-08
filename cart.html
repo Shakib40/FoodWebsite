@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="CSS/style.css" rel="stylesheet">
+    <style>
+        #cart{
+			display: grid;
+			grid-template-columns: repeat(5 , 19%);
+			grid-gap: 15px;
+			justify-content: center;
+		}
+        .foodList:hover{
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+		.foodList{
+			margin: 10px 10px 10px 10px;
+			cursor: pointer;
+            padding: 10px;
+		}
+
+		.foodList b {
+			font-size: 16px;
+			letter-spacing: 2px;
+			display: block;
+			font-weight: 800;
+			margin: 10px 0px 5px 5px;
+			/* text-align: center; */
+		}
+		.foodList img{
+			width: 100%;
+			background-size: cover;
+			height: 200px;
+			border-radius: 5px;
+		}
+        .checkOut{
+            width: 95%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .totalPrice b{
+            font-size: 24px;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        span{
+            margin: 10px 0px 10px 0px;
+            letter-spacing: 2px;
+            word-spacing: 1px;
+            color: red;
+        }
+        .placeorderBtn{
+            padding: 10px 60px;
+            letter-spacing: 2px;
+            font-size: 20px;
+        }
+        .placeorderBtn:hover{
+            color: white;
+            background-color: #7CB342;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <title>Cart</title>
+</head>
+<body>
+
+    <section class="navbar">
+        <div class="navbar-option">
+        <div><a href="menu.html">Menu</a></div>
+        <div><a href="signup.html">SignUp</a></div>
+        <div><a href="login.html">Login</a></div>
+        <div><a href="cart.html">Cart<span id="totalcart"></span></a></div>
+        </div>
+    </section>
+    
+    <section class="cartList">
+        <div id="cart"></div>
+    </section>
+    
+    <section class="checkOut"> 
+
+        <div class="totalPrice">
+            <b>Total Price:</b>
+            <b id="totalPrice"></b>
+        </div>
+
+        <span> Note: I am taking random price Between 100 to 1000+ because price was not there in Database.</span>
+
+        <div>
+            <button class="placeorderBtn" onclick="checkOut()">Place Order</button>
+        </div>
+
+    </section>
+</body>
+</html>
+<script>
+   const cart_div = document.getElementById('cart');
+
+   function CartData(){
+
+    let cart_data = JSON.parse(localStorage.getItem("cart"));
+    localStorage.setItem("cart" , JSON.stringify(cart_data));
+
+    document.getElementById('totalcart').innerText = "(" + cart_data.length + ")";
+
+    console.log("data" , cart_data[0]);
+    showFood(cart_data);
+   }
+   CartData();
+   
+   function showFood(foods){
+
+    cart_div.innerHTML = "";
+    foods.forEach( (food) => {
+        const {idMeal , strMeal , strMealThumb } = food[0];
+        const FoodEL = document.createElement('div');
+        FoodEL.classList.add("foodList");
+
+        let text = document.createElement('b');
+        text.innerHTML = strMeal;
+
+        let img = document.createElement('img');
+        img.src = strMealThumb;
+        
+        FoodEL.append( img , text );
+        
+        cart_div.append(FoodEL);
+        
+    });
+}
+
+let x = Math.floor((Math.random() * 1000) + 100);
+document.getElementById("totalPrice").innerHTML = x + " Rs";
+
+// function checkOut(){
+//     console.log("price" , x);
+
+//     setTimeout(function(){ alert("Your order is accepted 3 seconds" + " Price is:" + x ); }, 3000);
+    
+//     setTimeout(function(){ alert(" Your order is being cooked 8 seconds"); }, 8000);
+
+//     setTimeout(function(){ alert(" Your order is ready 10 seconds"); }, 10000);
+
+//     setTimeout(function(){ alert(" Order delivered"); }, 12000);
+
+// }
+
+
+function checkOut(){
+    console.log("price" , x);
+
+    setTimeout(function(){ 
+        alert("Your order is accepted 3 seconds" + " Price is:" + x ); 
+
+        setTimeout(function(){ 
+            alert(" Your order is being cooked 8 seconds"); 
+             
+            setTimeout(function(){ 
+                alert(" Your order is ready 10 seconds"); 
+
+                setTimeout(function(){ 
+                    alert(" Order delivered");
+                    window.location.href = "thankyou.html";
+
+                }, 12000);
+
+            }, 10000);
+
+        }, 8000);
+
+    }, 3000);
+       
+}
+
+</script>

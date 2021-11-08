@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="CSS/style.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+
+        #menu{
+			display: grid;
+			grid-template-columns: repeat(5 , 19%);
+			grid-gap: 15px;
+			justify-content: center;
+		}
+        .foodList:hover{
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+		.foodList{
+			margin: 10px 10px 10px 10px;
+			cursor: pointer;
+            padding: 10px;
+		}
+
+		.foodList b {
+			font-size: 16px;
+			letter-spacing: 2px;
+			display: block;
+			font-weight: 800;
+			margin: 10px 0px 5px 5px;
+			/* text-align: center; */
+		}
+		.foodList img{
+			width: 100%;
+			background-size: cover;
+			height: 200px;
+			border-radius: 5px;
+		}
+        .addToCartBtn{
+            cursor: pointer;
+            margin: 10px 0px 5px 5px;
+            padding: 10px 60px;
+            /* border: none; */
+
+        }
+        .addToCartBtn:hover{
+            background-color: yellowgreen;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <section class="navbar">
+        <div class="navbar-option">
+        <div><a href="menu.html">Menu</a></div>
+        <div><a href="signup.html">SignUp</a></div>
+        <div><a href="login.html">Login</a></div>
+        <div><a href="cart.html">Cart<span id="totalcart"></span></a></div>
+        </div>
+    </section>
+
+    <section class="ProductList">
+
+        <div id="menu"></div>
+
+    </section>
+</body>
+</html>
+
+<script>
+
+const showData = document.getElementById('menu');
+
+async function getData(){
+    const res = await fetch('https://themealdb.com/api/json/v1/1/search.php?f=b');
+    const resData = await res.json();
+    console.log("randon" , resData.meals);
+    showFood(resData.meals);
+}
+getData();
+
+function showFood(foods){
+    showData.innerHTML = "";
+    foods.forEach( (food) => {
+        const {idMeal , strMeal , strMealThumb } = food;
+        const FoodEL = document.createElement('div');
+        FoodEL.classList.add("foodList");
+
+        let text = document.createElement('b');
+        text.innerHTML = strMeal;
+
+        let img = document.createElement('img');
+        img.src = strMealThumb;
+
+        let btn = document.createElement('button');
+        btn.classList.add("addToCartBtn");
+        btn.innerText = "Add to Cart"; 
+         
+        FoodEL.append( img , text , btn);
+        
+        FoodEL.addEventListener("click" , function(){
+            const searchID = idMeal;
+            if(searchID){
+                getThatFood('https://themealdb.com/api/json/v1/1/lookup.php?i=' + searchID);
+            }
+
+        });
+        showData.append(FoodEL);
+        
+    });
+}
+async function getThatFood(url){
+    const res = await fetch(url);
+    const resData = await res.json();
+
+    console.log("database" , resData.meals);
+    addToCart( resData.meals );
+    alert("Food Has Been Added");
+
+}
+
+if(localStorage.getItem("cart") == null){
+    localStorage.setItem("cart" , JSON.stringify([]));
+}
+
+function addToCart(p){
+    let cart_data = JSON.parse(localStorage.getItem("cart"));
+    localStorage.setItem("cart" , JSON.stringify(cart_data));
+    cart_data.push(p);
+
+    localStorage.setItem("cart" , JSON.stringify(cart_data));
+    console.log("cart" , cart_data);
+    // alert(p);
+
+    console.log("cart Length" , cart_data.length);
+
+    document.getElementById('totalcart').innerText = "(" + cart_data.length + ")";
+
+}
+
+
+
+</script>

@@ -1,0 +1,23 @@
+.navbar{
+    width: 98%;
+    border: 1px solid #ccc;
+    margin: auto;
+    height: 55px;
+    
+}
+.navbar-option{
+    float: right;
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-right: 30px;
+    /* text-align: center; */
+    margin-top: 18px;
+}
+a{
+    text-decoration: none;
+    font-size: 20px;
+    letter-spacing: 2px;
+    font-weight: 400;
+}
